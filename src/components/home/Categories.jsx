@@ -9,6 +9,7 @@ import {
   TableRow,
 } from "@material-ui/core";
 import { categories } from "../../constants/data";
+import { Link } from "react-router-dom";
 
 const useStyle = makeStyles({
   create: {
@@ -20,6 +21,9 @@ const useStyle = makeStyles({
   table: {
     border: "1px solid lightgray",
   },
+  link: {
+    textDecoration: "none",
+  },
 });
 
 export default function Categories() {
@@ -27,9 +31,11 @@ export default function Categories() {
 
   return (
     <div>
-      <Button variant="contained" className={classes.create}>
-        Create Post
-      </Button>
+      <Link className={classes.link} to="/create">
+        <Button variant="contained" className={classes.create}>
+          Create Post
+        </Button>
+      </Link>
       <Table className={classes.table}>
         <TableHead>
           <TableRow>

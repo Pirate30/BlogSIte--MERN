@@ -1,5 +1,6 @@
 import { Grid } from "@material-ui/core";
 import React from "react";
+import { Link } from "react-router-dom";
 import Post from "./Post";
 
 export default function Posts() {
@@ -7,7 +8,9 @@ export default function Posts() {
 
   return posts.map((p) => (
     <Grid item lg={3} sm={4} xs={12}>
-      <Post />
+      <Link to="/details" style={{ textDecoration: "none", color: "inherit" }}>
+        <Post />
+      </Link>
     </Grid>
   ));
 }
