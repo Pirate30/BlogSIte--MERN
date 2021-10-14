@@ -7,7 +7,9 @@ import {
   TextareaAutosize,
 } from "@material-ui/core";
 import { AddCircle } from "@material-ui/icons";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useHistory } from "react-router";
+import { getBlogDetails, updatePost } from "../../api/api";
 
 const useStyle = makeStyles((theme) => ({
   container: {
@@ -46,26 +48,69 @@ const useStyle = makeStyles((theme) => ({
   },
 }));
 
-export default function UpdateBlog() {
+const initialValues = {
+  title: "",
+  description: "",
+  picture: "",
+  username: "John's Blog",
+  categories: "",
+  createdDate: new Date(),
+};
+
+export default function UpdateBlog(props) {
   const url =
     "https://images.pexels.com/photos/3861969/pexels-photo-3861969.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940";
 
   const classes = useStyle();
+  const history = useHistory();
+
+  const [post, setPost] = useState(initialValues);
+  useEffect(() => {
+    const getData = async () => {
+      const data = await getBlogDetails(props.match.params.id);
+      setPost(data.data);
+    };
+    getData();
+  }, [props.match.params.id]);
+
+  const handleChange = (e) => {
+    setPost({ ...post, [e.target.name]: e.target.value });
+  };
+
+  // console.log(post);
+
+  const handleUpdate = async () => {
+    await updatePost(props.match.params.id, post);
+    history.push(`/details/${props.match.params.id}`);
+  };
 
   return (
     <Box className={classes.container}>
       <img className={classes.image} src={url} alt="banner" />
       <FormControl className={classes.form}>
         <AddCircle fontSize="large" color="primary" />
-        <InputBase className={classes.textfield} placeholder="Blog Title" />
-        <Button variant="contained" color="primary">
+        <InputBase
+          className={classes.textfield}
+          placeholder="Blog Title"
+          name="title"
+          value={post.title}
+          onChange={(e) => handleChange(e)}
+        />
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => handleUpdate()}
+        >
           Update
         </Button>
       </FormControl>
       <TextareaAutosize
         rowsMin={5}
         placeholder="Share Your Thoughts..."
+        value={post.description}
+        name="description"
         className={classes.textarea}
+        onChange={(e) => handleChange(e)}
       />
     </Box>
   );

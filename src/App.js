@@ -16,15 +16,23 @@ function App() {
           <Route exact path="/">
             <Home />
           </Route>
-          <Route path="/details">
+          {/* <Route path="/details/:id">
             <DetailBlog />
-          </Route>
+          </Route> */}
+          <Route
+            path="/details/:id"
+            render={(props) => <DetailBlog {...props} />}
+          />
           <Route path="/create">
             <CreateBlog />
           </Route>
-          <Route path="/update">
+          {/* <Route path="/update/:id">
             <UpdateBlog />
-          </Route>
+          </Route> */}
+          <Route
+            path="/update/:id"
+            render={(props) => <UpdateBlog {...props} />}
+          />
         </Switch>
       </Box>
     </BrowserRouter>

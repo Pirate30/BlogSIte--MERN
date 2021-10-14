@@ -1,8 +1,9 @@
 import { Box, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Delete, Edit } from "@material-ui/icons";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
+import { deletBlog, getBlogDetails } from "../../api/api";
 
 const useStyle = makeStyles((theme) => ({
   container: {
@@ -34,41 +35,59 @@ const useStyle = makeStyles((theme) => ({
     flexDirection: "row",
     margin: "20px 0",
   },
+  link: {
+    textDecoration: "none",
+    color: "inherit",
+  },
 }));
 
-export default function DetailBlog() {
+export default function DetailBlog(props) {
   const classes = useStyle();
   const url =
     "https://images.pexels.com/photos/735911/pexels-photo-735911.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500";
+
+  const [post, setPost] = useState({});
+  const history = useHistory();
+  // console.log("params..", props);
+  useEffect(() => {
+    const getData = async () => {
+      let data = await getBlogDetails(props.match.params.id);
+      // console.log(data);
+      setPost(data.data);
+    };
+    getData();
+  }, []);
+
+  const deletPost = async () => {
+    await deletBlog(post._id);
+    history.push("/");
+  };
 
   return (
     <Box className={classes.container}>
       <img className={classes.image} src={url} alt="" />
       <Box className={classes.icons}>
-        <Link to="/update">
+        <Link to={`/update/${post._id}`}>
           <Edit className={classes.icon} color="action" />
         </Link>
-        <Delete className={classes.icon} color="error" />
+        <Delete
+          onClick={() => deletPost()}
+          className={classes.icon}
+          color="error"
+        />
       </Box>
-      <Typography className={classes.heading}>The Blog Title</Typography>
+      <Typography className={classes.heading}>{post.title}</Typography>
       <Box className={classes.subheading} className={classes.subheading}>
-        <Typography>
-          Autor: <span style={{ fontWeight: "600" }}> Jhon Rodriguez </span>
+        <Link className={classes.link} to={`/?username=${post.username}`}>
+          <Typography>
+            Autor: <span style={{ fontWeight: "600" }}> {post.username} </span>
+          </Typography>
+        </Link>
+        <Typography style={{ marginLeft: "auto" }}>
+          {new Date(post.createdDate).toDateString()}
         </Typography>
-        <Typography style={{ marginLeft: "auto" }}>11-10-21</Typography>
       </Box>
-      <Typography>
-        Why do we use it? It is a long established fact that a reader will be
-        distracted by the readable content of a page when looking at its layout.
-        The point of using Lorem Ipsum is that it has a more-or-less normal
-        distribution of letters, as opposed to using 'Content here, content
-        here', making it look like readable English. Many desktop publishing
-        packages and web page editors now use Lorem Ipsum as their default model
-        text, and a search for 'lorem ipsum' will uncover many web sites still
-        in their infancy. Various versions have evolved over the years,
-        sometimes by accident, sometimes on purpose (injected humour and the
-        like).
-      </Typography>
+      <Typography>{post.description}</Typography>
     </Box>
   );
 }

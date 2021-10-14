@@ -9,3 +9,38 @@ export const createPost = async (post) => {
     console.log("error ocuured while creating tthe post", error);
   }
 };
+
+export const getAllPosts = async (param) => {
+  try {
+    let result = await axios.get(`${url}/blogs${param}`);
+    console.log("result..", result);
+    return result;
+  } catch (error) {
+    console.log("error while getting the all posts", error);
+  }
+};
+
+export const getBlogDetails = async (id) => {
+  try {
+    let result = await axios.get(`${url}/blogs/${id}`);
+    return result;
+  } catch (error) {
+    console.log("error while fetching blog details", error);
+  }
+};
+
+export const updatePost = async (id, post) => {
+  try {
+    await axios.post(`${url}/blogs/update/${id}`, post);
+  } catch (error) {
+    console.log("error while updating the blog", error);
+  }
+};
+
+export const deletBlog = async (id) => {
+  try {
+    await axios.delete(`${url}/blogs/delete/${id}`);
+  } catch (error) {
+    console.log(error);
+  }
+};

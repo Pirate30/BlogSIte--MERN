@@ -34,20 +34,19 @@ const useStyles = makeStyles({
   },
 });
 
-export default function Post() {
+export default function Post({ post }) {
   const classes = useStyles();
 
   const url =
+    post.picture ||
     "https://images.pexels.com/photos/777001/pexels-photo-777001.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940";
   return (
     <Box className={classes.container}>
       <img src={url} alt="post" className={classes.image} />
-      <Typography className={classes.text}>Sci-Fi</Typography>
-      <Typography className={classes.heading}>John's Blogs</Typography>
-      <Typography className={classes.text}>John Caestro</Typography>
-      <Typography className={classes.details}>
-        Heyy folks, this is Jhon...skfjsjkbvkbkdfkvbkdfbvkbdfkvbdkbvkdbfkvbdk
-      </Typography>
+      <Typography className={classes.text}>{post.categories}</Typography>
+      <Typography className={classes.heading}>{post.title}</Typography>
+      <Typography className={classes.text}>Author: {post.username}</Typography>
+      <Typography className={classes.details}>{post.description}</Typography>
     </Box>
   );
 }

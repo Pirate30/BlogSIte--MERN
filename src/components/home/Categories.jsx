@@ -23,6 +23,7 @@ const useStyle = makeStyles({
   },
   link: {
     textDecoration: "none",
+    color: "inherit",
   },
 });
 
@@ -39,13 +40,21 @@ export default function Categories() {
       <Table className={classes.table}>
         <TableHead>
           <TableRow>
-            <TableCell>All Category</TableCell>
+            <TableCell>
+              <Link to="/" className={classes.link}>
+                All Category
+              </Link>
+            </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {categories.map((cat) => (
             <TableRow>
-              <TableCell>{cat}</TableCell>
+              <TableCell>
+                <Link to={`/?categories=${cat}`} className={classes.link}>
+                  {cat}
+                </Link>
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
