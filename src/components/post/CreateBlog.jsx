@@ -7,9 +7,9 @@ import {
   TextareaAutosize,
 } from "@material-ui/core";
 import { AddCircle } from "@material-ui/icons";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
-import { createPost } from "../../api/api";
+import { createPost, uploadFile } from "../../api/api";
 
 const useStyle = makeStyles((theme) => ({
   container: {
@@ -58,13 +58,30 @@ const initialValues = {
 };
 
 export default function CreateBlog() {
-  const url =
-    "https://images.pexels.com/photos/3861969/pexels-photo-3861969.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940";
-
   const classes = useStyle();
   const history = useHistory();
 
   const [post, setPost] = useState(initialValues);
+  const [file, setFile] = useState("");
+  const [imgUrl, setImgUrl] = useState("");
+
+  const url = post.pictue
+    ? post.picture
+    : "https://images.pexels.com/photos/3861969/pexels-photo-3861969.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940";
+
+  useEffect(() => {
+    const getFile = async () => {
+      if (file) {
+        const data = new FormData();
+        data.append("name", file.name);
+        data.append("file", file);
+        const image = await uploadFile(data);
+        post.picture = image.data;
+        setImgUrl(image.data);
+      }
+    };
+    getFile();
+  }, [file, post]);
 
   const handleChange = (e) => {
     setPost({ ...post, [e.target.name]: e.target.value });
@@ -79,7 +96,19 @@ export default function CreateBlog() {
     <Box className={classes.container}>
       <img className={classes.image} src={url} alt="banner" />
       <FormControl className={classes.form}>
-        <AddCircle fontSize="large" color="primary" />
+        <label htmlFor="fileInput">
+          <AddCircle
+            style={{ cursor: "pointer" }}
+            fontSize="large"
+            color="primary"
+          />
+        </label>
+        <input
+          type="file"
+          id="fileInput"
+          style={{ display: "none" }}
+          onChange={(e) => setFile(e.target.files[0])}
+        />
         <InputBase
           onChange={(e) => handleChange(e)}
           name="title"

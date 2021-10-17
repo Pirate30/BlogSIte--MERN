@@ -56,7 +56,7 @@ export default function DetailBlog(props) {
       setPost(data.data);
     };
     getData();
-  }, []);
+  }, [props.match.params.id]);
 
   const deletPost = async () => {
     await deletBlog(post._id);

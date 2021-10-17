@@ -1,6 +1,8 @@
 import React from "react";
 import { AppBar, Toolbar, Typography, makeStyles } from "@material-ui/core";
 import { Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
+import { useOktaAuth } from "@okta/okta-react";
 
 const useStyles = makeStyles({
   component: {
@@ -21,6 +23,22 @@ const useStyles = makeStyles({
 
 export default function Nav() {
   const classes = useStyles();
+  const history = useHistory();
+
+  const { oktaAuth, authState } = useOktaAuth();
+
+  if (!authState && authState.isPending) return null;
+
+  const login = async () => history.push("/login");
+
+  const logout = async () => oktaAuth.signOut();
+
+  const button = authState.isAuthenticated ? (
+    <button onClick={logout}>Logout</button>
+  ) : (
+    <button onClick={login}>Login</button>
+  );
+
   return (
     <div>
       <AppBar className={classes.component}>
@@ -30,7 +48,7 @@ export default function Nav() {
           </Link>
           <Typography>About</Typography>
           <Typography>Contact</Typography>
-          <Typography>Login</Typography>
+          <Typography>{button}</Typography>
         </Toolbar>
       </AppBar>
     </div>

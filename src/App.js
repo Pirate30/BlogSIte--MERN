@@ -1,24 +1,26 @@
 import "./App.css";
-import Home from "./components/home/Home";
-import Nav from "./components/Nav";
-import { Box } from "@material-ui/core";
-import DetailBlog from "./components/post/DetailBlog";
+// import Home from "./components/home/Home";
+// import Nav from "./components/Nav";
+// import { Box } from "@material-ui/core";
+// import DetailBlog from "./components/post/DetailBlog";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
-import CreateBlog from "./components/post/CreateBlog";
-import UpdateBlog from "./components/post/UpdateBlog";
+// import CreateBlog from "./components/post/CreateBlog";
+// import UpdateBlog from "./components/post/UpdateBlog";
+import AppWithRouterAccess from "./AppWithRouterAccess";
 
 function App() {
   return (
     <BrowserRouter>
-      <Nav />
+      <AppWithRouterAccess />
+      {/* <Nav />
       <Box style={{ marginTop: 64 }}>
         <Switch>
           <Route exact path="/">
             <Home />
           </Route>
-          {/* <Route path="/details/:id">
+          <Route path="/details/:id">
             <DetailBlog />
-          </Route> */}
+          </Route>
           <Route
             path="/details/:id"
             render={(props) => <DetailBlog {...props} />}
@@ -26,15 +28,15 @@ function App() {
           <Route path="/create">
             <CreateBlog />
           </Route>
-          {/* <Route path="/update/:id">
+          <Route path="/update/:id">
             <UpdateBlog />
-          </Route> */}
+          </Route>
           <Route
             path="/update/:id"
             render={(props) => <UpdateBlog {...props} />}
           />
         </Switch>
-      </Box>
+      </Box> */}
     </BrowserRouter>
   );
 }
